@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>RePoin EcoBox – Prototype</title>
+<style>
+:root{--bg:#f3f1ea;--sf:#fff;--tx:#17251c;--mu:#5d6b62;--ln:#d9d6c9;--pr:#1f6b45;--pr2:#e1f0e6;--ac:#e8a317;--pet:#2e7fb8;--alu:#7a8591;--gls:#2f9a7a;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101712;--sf:#18221b;--tx:#e8efe9;--mu:#9caba1;--ln:#2c3a30;--pr:#5fc08a;--pr2:#1c3326;--ac:#f0b83c;color-scheme:dark}}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;line-height:1.45}
+.app{max-width:460px;margin:0 auto;padding:16px 16px 90px}
+h1{font-size:22px;margin:4px 0 2px;letter-spacing:-.01em}h2{font-size:17px;margin:20px 0 8px}
+p.s{color:var(--mu);margin:0 0 12px;font-size:14px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:14px;margin-bottom:12px}
+.bal{display:flex;justify-content:space-between;align-items:flex-end;background:var(--pr);color:#fff;border-radius:16px;padding:16px;margin-bottom:12px}
+.bal b{font-size:34px;line-height:1}.bal small{opacity:.85}
+.btns{display:grid;grid-template-columns:1fr;gap:8px}
+button{font:inherit;cursor:pointer}
+.mat{display:flex;align-items:center;gap:12px;padding:12px;border:1.5px solid var(--ln);border-radius:12px;background:var(--sf);color:var(--tx);text-align:left;width:100%}
+.mat:hover,.mat:focus-visible{border-color:var(--pr);outline:none}
+.mat i{width:14px;height:36px;border-radius:5px;flex:none}
+.mat span{flex:1}.mat em{font-style:normal;font-weight:700;color:var(--pr)}
+.mat small{display:block;color:var(--mu)}
+.box{display:flex;gap:8px;height:130px;align-items:flex-end;background:var(--pr2);border-radius:12px;padding:10px}
+.bay{flex:1;height:100%;border:2px solid var(--ln);border-radius:8px;position:relative;overflow:hidden;background:var(--sf)}
+.bay div{position:absolute;bottom:0;left:0;right:0;transition:height .5s}
+.bay span{position:absolute;top:4px;left:0;right:0;text-align:center;font-size:11px;font-weight:700;color:var(--tx)}
+.log{font-size:13px;color:var(--mu);margin:8px 0 0;min-height:20px}
+.pri{background:var(--pr);color:#fff;border:0;border-radius:10px;padding:10px 14px;font-weight:600}
+.pri:disabled{opacity:.4;cursor:not-allowed}
+.row{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--ln)}
+.row:last-child{border:0}
+.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--sf);border-top:1px solid var(--ln);display:flex;justify-content:center;padding-bottom:env(safe-area-inset-bottom,0px)}
+.tabs div{display:flex;max-width:460px;width:100%}
+.tabs button{flex:1;background:none;border:0;padding:12px 4px;color:var(--mu);font-size:13px;font-weight:600}
+.tabs button[aria-selected=true]{color:var(--pr);box-shadow:inset 0 3px 0 var(--pr)}
+.tab{display:none}.tab.on{display:block}
+.alert{padding:10px 12px;border-radius:10px;background:#fbefd0;color:#5c4200;font-size:14px;margin-top:8px}
+.me{background:var(--pr2);border-radius:8px;padding-left:6px;font-weight:700}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.stats div{background:var(--pr2);border-radius:10px;padding:10px}.stats b{font-size:20px;display:block}
+.flow{display:flex;gap:6px;font-size:12px;color:var(--mu);margin:0 0 12px;flex-wrap:wrap}.flow span{background:var(--sf);border:1px solid var(--ln);border-radius:20px;padding:3px 10px}
+.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .3s;max-width:90%}
+.toast.on{opacity:1}
+.hero{border-radius:18px;overflow:hidden;background:var(--pr2);margin-bottom:12px;border:1px solid var(--ln)}.hero svg{display:block;width:100%;height:auto}.hero .tx{padding:6px 16px 14px}.hero h1{margin:0}.hero p{margin:2px 0 0}
+.sk{fill:var(--pr2)}.hl{fill:var(--pr);opacity:.28}.hl2{fill:var(--pr);opacity:.45}.bx{fill:var(--pr)}.bx2{fill:#fff;opacity:.2}.sun{fill:var(--ac)}.trk{fill:#8a5a2b}.lf{fill:var(--pr)}
+.drop{animation:drop 3s ease-in infinite;transform-box:fill-box}
+@keyframes drop{0%{transform:translateY(-34px);opacity:0}15%{opacity:1}65%{transform:translateY(34px);opacity:1}80%,100%{transform:translateY(40px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.drop{animation:none}}
+.ico{width:36px;height:46px;flex:none}.ico svg{width:100%;height:100%;display:block}
+.mas{display:flex;gap:10px;align-items:center;margin:12px 0}.mas svg{width:64px;flex:none}#say{background:var(--sf);border:1px solid var(--ln);border-radius:12px;padding:8px 12px;font-size:14px}
+.ban{border-radius:14px;overflow:hidden;margin-bottom:10px;background:var(--pr2);border:1px solid var(--ln)}.ban svg{display:block;width:100%;height:auto}
+.cf{position:fixed;top:30%;width:8px;height:12px;border-radius:2px;z-index:50;pointer-events:none;animation:cf 1.3s ease-out forwards}
+@keyframes cf{0%{transform:translate(0,0) rotate(0);opacity:1}100%{transform:translate(var(--x),260px) rotate(540deg);opacity:0}}
+.wv{animation:wv 2.4s ease-in-out infinite;transform-box:fill-box;transform-origin:20% 50%}@keyframes wv{50%{transform:rotate(-14deg)}}
+@media (prefers-reduced-motion:reduce){.wv{animation:none}}
+</style>
+</head>
+<body>
+<div class="app">
+<div class="hero"><svg viewBox="0 0 400 190" role="img" aria-label="Ilustrasi EcoBox di kampus: botol masuk ke kotak setoran, pohon dan matahari di latar"><rect class="sk" width="400" height="190"/><circle class="sun" cx="330" cy="44" r="20"/><path class="hl" d="M0 150Q70 110 150 140T300 130T400 145V190H0z"/><path class="hl2" d="M0 168Q90 140 190 162T400 158V190H0z"/><rect class="trk" x="52" y="112" width="9" height="52"/><circle class="lf" cx="56" cy="98" r="28"/><circle class="lf" cx="38" cy="114" r="18" opacity=".8"/><circle class="lf" cx="76" cy="114" r="18" opacity=".8"/><rect class="trk" x="330" y="126" width="7" height="38"/><circle class="lf" cx="333" cy="116" r="20" opacity=".9"/><rect class="bx" x="140" y="50" width="120" height="118" rx="12"/><rect class="bx2" x="140" y="50" width="120" height="24" rx="12"/><rect x="176" y="58" width="48" height="8" rx="4" fill="#0c2a1a"/><rect x="154" y="90" width="28" height="44" rx="6" fill="#2e7fb8"/><rect x="186" y="90" width="28" height="44" rx="6" fill="#7a8591"/><rect x="218" y="90" width="28" height="44" rx="6" fill="#2f9a7a"/><circle cx="200" cy="150" r="9" fill="#fff" opacity=".9"/><path d="M196 150a4 4 0 0 1 7-2M204 150a4 4 0 0 1-7 2" stroke="#1f6b45" stroke-width="1.6" fill="none"/><g class="drop"><rect x="195" y="16" width="10" height="6" rx="2" fill="#2e7fb8"/><path d="M192 24h16l3 8v18a3 3 0 0 1-3 3h-16a3 3 0 0 1-3-3V32z" fill="#2e7fb8" opacity=".9"/></g></svg><div class="tx"><h1>RePoin EcoBox</h1><p class="s">Pilah di kotak yang tepat, kumpulkan poin, tukar jadi saldo.</p></div></div>
+
+<div class="tab on" id="t0">
+ <div class="bal"><div><small>Poin kamu</small><br><b id="pts">0</b></div><div style="text-align:right"><small>Setara</small><br><b style="font-size:20px" id="rp">Rp0</b></div></div>
+ <div class="flow"><span>1 Scan QR box</span><span>2 Masukkan botol</span><span>3 Sensor baca jenis</span><span>4 Poin masuk</span></div>
+<div class="mas"><svg viewBox="0 0 80 90" role="img" aria-label="Maskot Reko"><path d="M40 4c10 2 16 8 16 16-10 0-16-6-16-16z" fill="#2f9a7a"/><rect x="18" y="18" width="44" height="60" rx="20" fill="#1f6b45"/><rect x="26" y="36" width="28" height="22" rx="10" fill="#fff" opacity=".95"/><circle cx="34" cy="46" r="3.5" fill="#17251c"/><circle cx="46" cy="46" r="3.5" fill="#17251c"/><path d="M33 52q7 7 14 0" stroke="#17251c" stroke-width="2.4" fill="none" stroke-linecap="round"/><circle cx="28" cy="54" r="3" fill="#e8a317" opacity=".7"/><circle cx="52" cy="54" r="3" fill="#e8a317" opacity=".7"/><rect class="wv" x="60" y="46" width="14" height="7" rx="3.5" fill="#1f6b45"/><rect x="6" y="46" width="14" height="7" rx="3.5" fill="#1f6b45"/><rect x="28" y="78" width="9" height="8" rx="3" fill="#17251c"/><rect x="43" y="78" width="9" height="8" rx="3" fill="#17251c"/></svg><div id="say">Halo, aku Reko! Masukkan botol bekasmu, aku bantu hitung poinnya.</div></div>
+ <h2 style="margin-top:4px">Simulasi memasukkan sampah</h2>
+ <p class="s">Tekan jenis kemasan untuk mensimulasikan sensor EcoBox mendeteksi dan memberi poin.</p>
+ <div class="btns" id="mats"></div>
+ <div class="card" style="margin-top:12px"><b>Kondisi EcoBox Kantin Pusat</b>
+  <div class="box" id="box" style="margin-top:8px"></div>
+  <div class="log" id="log">Belum ada setoran.</div></div>
+</div>
+
+<div class="tab" id="t1">
+<div class="ban"><svg viewBox="0 0 400 96" role="img" aria-label="Ilustrasi hadiah dan koin"><rect class="sk" width="400" height="96"/><path class="hl" d="M0 80Q100 60 200 76T400 70V96H0z"/><rect x="168" y="46" width="64" height="42" rx="4" fill="#e8a317"/><rect x="162" y="34" width="76" height="15" rx="4" fill="#f0b83c"/><rect x="196" y="34" width="8" height="54" fill="#1f6b45"/><path d="M200 34c-14-16-26-4-14 0zM200 34c14-16 26-4 14 0z" fill="#1f6b45"/><circle cx="100" cy="66" r="15" fill="#e8a317"/><circle cx="100" cy="66" r="10" fill="none" stroke="#fff" stroke-width="2" opacity=".6"/><circle cx="128" cy="76" r="11" fill="#f0b83c"/><circle cx="300" cy="64" r="15" fill="#e8a317"/><circle cx="326" cy="76" r="11" fill="#f0b83c"/><circle cx="60" cy="26" r="4" fill="#1f6b45" opacity=".5"/><circle cx="350" cy="28" r="5" fill="#1f6b45" opacity=".5"/></svg></div>
+ <h2 style="margin-top:4px">Tukar poin</h2><p class="s">1 poin = Rp500. Minimal penukaran 10 poin.</p>
+ <div class="card" id="rewards"></div>
+ <h2>Riwayat</h2><div class="card" id="hist"><span class="s">Belum ada riwayat.</span></div>
+</div>
+
+<div class="tab" id="t2">
+ <div class="ban"><svg viewBox="0 0 400 96" role="img" aria-label="Ilustrasi piala juara"><rect class="sk" width="400" height="96"/><path class="hl" d="M0 84Q100 64 200 80T400 72V96H0z"/><path d="M170 12h60v26a30 30 0 0 1-60 0z" fill="#e8a317"/><path d="M170 18h-14a10 10 0 0 0 0 20h16M230 18h14a10 10 0 0 1 0 20h-16" stroke="#e8a317" stroke-width="5" fill="none"/><rect x="192" y="62" width="16" height="14" fill="#c98a0c"/><rect x="178" y="74" width="44" height="12" rx="3" fill="#1f6b45"/><path d="M200 24l4 8 9 1-6 6 2 9-9-5-9 5 2-9-6-6 9-1z" fill="#fff" opacity=".85"/><rect x="80" y="58" width="18" height="28" rx="3" fill="#2f9a7a"/><rect x="102" y="46" width="18" height="40" rx="3" fill="#1f6b45"/><rect x="280" y="54" width="18" height="32" rx="3" fill="#2e7fb8"/><rect x="302" y="66" width="18" height="20" rx="3" fill="#7a8591"/></svg></div>
+ <h2 style="margin-top:4px">Leaderboard kampus</h2><p class="s">Peringkat mingguan antar mahasiswa dan UKM.</p>
+ <div class="card" id="lb"></div>
+ <h2>Dampak kamu</h2>
+ <div class="stats"><div><b id="i1">0</b>botol disetor</div><div><b id="i2">0 g</b>CO₂ dihindari (estimasi)</div></div>
+</div>
+
+<div class="tab" id="t3">
+ <div class="ban"><svg viewBox="0 0 400 96" role="img" aria-label="Ilustrasi truk pengangkut daur ulang"><rect class="sk" width="400" height="96"/><path class="hl" d="M0 70Q100 54 200 66T400 60V96H0z"/><rect x="60" y="88" width="280" height="4" fill="#17251c" opacity=".25"/><rect x="110" y="34" width="120" height="44" rx="5" fill="#1f6b45"/><rect x="234" y="46" width="46" height="32" rx="5" fill="#2f9a7a"/><path d="M244 50h22l8 14h-30z" fill="#fff" opacity=".8"/><circle cx="146" cy="80" r="10" fill="#17251c"/><circle cx="146" cy="80" r="4" fill="#fff"/><circle cx="256" cy="80" r="10" fill="#17251c"/><circle cx="256" cy="80" r="4" fill="#fff"/><path d="M126 48a8 8 0 0 1 14-2M140 48a8 8 0 0 1-14 2" stroke="#fff" stroke-width="2.4" fill="none"/><rect x="160" y="44" width="12" height="20" rx="3" fill="#2e7fb8"/><rect x="176" y="50" width="12" height="14" rx="3" fill="#7a8591"/><circle cx="330" cy="34" r="14" class="sun"/></svg></div>
+ <h2 style="margin-top:4px">Dashboard mitra</h2><p class="s">Tampilan petugas / mitra daur ulang. Data dari sensor kapasitas tiap EcoBox.</p>
+ <div class="card"><b>Isi EcoBox terkini</b><div id="cap" style="margin-top:6px"></div></div>
+ <div class="card"><b>Estimasi ekonomi unit (per bulan)</b>
+  <div class="row"><span>Setoran</span><span>3.000 botol</span></div>
+  <div class="row"><span>Pendapatan jual material</span><span id="e1"></span></div>
+  <div class="row"><span>Merchant fee + sponsor</span><span>Rp1.500.000</span></div>
+  <div class="row"><span>Biaya poin ke mahasiswa</span><span id="e2"></span></div>
+  <div class="row"><span>Operasional &amp; app</span><span>Rp1.800.000</span></div>
+  <div class="row"><b>Sisa (Profit for Purpose)</b><b id="e3"></b></div>
+  <p class="s" style="margin-top:8px">Asumsi: campuran 60% PET, 25% kaleng, 15% kaca. Angka ilustrasi untuk tugas, ganti dengan data riset tim.</p></div>
+</div>
+</div>
+
+<nav class="tabs"><div role="tablist" id="tabs"></div></nav>
+<div class="toast" id="toast"></div>
+
+<script>
+var M=[
+ {k:'pet',n:'Plastik PET ≤600 ml',p:1,c:'--pet',g:20,co:80},
+ {k:'alu',n:'Kaleng aluminium',p:3,c:'--alu',g:15,co:170},
+ {k:'gls1',n:'Botol kaca ≤330 ml',p:3,c:'--gls',g:200,co:60,bay:'gls'},
+ {k:'gls2',n:'Botol kaca >330 ml',p:5,c:'--gls',g:350,co:100,bay:'gls'}];
+var BAYS=[{k:'pet',n:'PET'},{k:'alu',n:'Kaleng'},{k:'gls',n:'Kaca'}];
+var CAP=40,S={pts:0,n:0,co:0,fill:{pet:6,alu:3,gls:2},hist:[]};
+var R=[{n:'Saldo GoPay Rp5.000',c:10},{n:'Saldo Dana Rp10.000',c:20},{n:'Voucher kantin Rp7.500',c:15},{n:'Voucher fotokopi Rp3.000',c:6}];
+var LB=[['Nadia (Teknik)',182],['UKM Pecinta Alam',160],['Raka (FEB)',121],['Salsa (FISIP)',88]];
+var $=function(i){return document.getElementById(i)};
+function rp(x){return 'Rp'+x.toLocaleString('id-ID')}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(function(){e.classList.remove('on')},2200)}
+function ic(k){var s={pet:'<svg viewBox="0 0 40 48"><rect x="16" y="2" width="8" height="6" rx="2" fill="#2e7fb8"/><path d="M14 10h12l3 8v24a4 4 0 0 1-4 4H15a4 4 0 0 1-4-4V18z" fill="#2e7fb8" opacity=".9"/><rect x="12" y="24" width="16" height="9" fill="#fff" opacity=".6"/></svg>',alu:'<svg viewBox="0 0 40 48"><rect x="9" y="7" width="22" height="36" rx="4" fill="#7a8591"/><ellipse cx="20" cy="7" rx="11" ry="3" fill="#b8c0c8"/><rect x="9" y="20" width="22" height="10" fill="#fff" opacity=".35"/></svg>'};var g='<svg viewBox="0 0 40 48"><path d="M17 2h6v14l5 8v18a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V24l5-8z" fill="#2f9a7a" opacity=".9"/><rect x="14" y="28" width="12" height="8" fill="#fff" opacity=".45"/></svg>';return s[k]||g}
+function boom(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;var cs=['#1f6b45','#e8a317','#2e7fb8','#2f9a7a','#e5533d'];for(var i=0;i<26;i++){var d=document.createElement('i');d.className='cf';d.style.cssText='left:'+(20+Math.random()*60)+'%;background:'+cs[i%5]+';animation-delay:'+(Math.random()*.2)+'s;--x:'+(Math.random()*160-80)+'px';document.body.appendChild(d);setTimeout(function(e){e.remove()}.bind(null,d),1700)}}
+function say(m){var L=['Mantap! ','Keren! ','Bumi ikut senang! ','Lanjut terus! '];$('say').textContent=L[S.n%4]+m.n+' masuk, +'+m.p+' poin.'+(S.pts>=10?' Poinmu sudah cukup untuk ditukar!':'')}
+function mats(){$('mats').innerHTML=M.map(function(m){return '<button class="mat" data-k="'+m.k+'"><div class="ico">'+ic(m.k)+'</div><span>'+m.n+'<small>'+rp(m.p*500)+' per kemasan</small></span><em>+'+m.p+' poin</em></button>'}).join('');
+ document.querySelectorAll('.mat').forEach(function(b){b.onclick=function(){dep(b.dataset.k)}})}
+function dep(k){var m=M.filter(function(x){return x.k==k})[0],b=m.bay||m.k;
+ if(S.fill[b]>=CAP){$('log').textContent='Kompartemen '+b.toUpperCase()+' penuh. Petugas sudah diberi notifikasi.';toast('Box penuh');return}
+ S.fill[b]++;S.pts+=m.p;S.n++;S.co+=m.co;S.hist.unshift('+'+m.p+' poin · '+m.n);boom();say(m);
+ $('log').textContent='Terdeteksi: '+m.n+'. Poin +'+m.p+' masuk ke akun.';draw()}
+function draw(){
+ $('pts').textContent=S.pts;$('rp').textContent=rp(S.pts*500);
+ $('box').innerHTML=BAYS.map(function(b){var p=Math.round(S.fill[b.k]/CAP*100),c=b.k=='gls'?'--gls':'--'+b.k;return '<div class="bay"><div style="height:'+p+'%;background:var('+c+');opacity:.75"></div><span>'+b.n+' '+p+'%</span></div>'}).join('');
+ $('rewards').innerHTML=R.map(function(r,i){return '<div class="row"><span>'+r.n+'<br><small class="s">'+r.c+' poin</small></span><button class="pri" data-i="'+i+'" '+(S.pts<r.c?'disabled':'')+'>Tukar</button></div>'}).join('');
+ document.querySelectorAll('#rewards .pri').forEach(function(b){b.onclick=function(){var r=R[b.dataset.i];if(S.pts<r.c)return;S.pts-=r.c;S.hist.unshift('−'+r.c+' poin · '+r.n);toast('Berhasil ditukar: '+r.n);boom();draw()}});
+ $('hist').innerHTML=S.hist.length?S.hist.slice(0,8).map(function(h){return '<div class="row"><span>'+h+'</span></div>'}).join(''):'<span class="s">Belum ada riwayat. Setor botol dulu di tab Setor.</span>';
+ var all=LB.concat([['Kamu',S.pts+S.n*0]]).sort(function(a,b){return b[1]-a[1]});
+ $('lb').innerHTML=all.map(function(x,i){return '<div class="row '+(x[0]=='Kamu'?'me':'')+'"><span>'+(i+1)+'. '+x[0]+'</span><b>'+x[1]+' poin</b></div>'}).join('');
+ $('i1').textContent=S.n;$('i2').textContent=S.co+' g';
+ $('cap').innerHTML=BAYS.map(function(b){var p=Math.round(S.fill[b.k]/CAP*100);return '<div class="row"><span>'+b.n+'</span><b>'+p+'%</b></div>'+(p>=80?'<div class="alert">Kompartemen '+b.n+' hampir penuh. Jadwalkan pengangkutan.</div>':'')}).join('');
+ var rev=Math.round(1800*(.6*400+.25*1800/.25*0+0)+0);
+ var jual=1800*300+750*1500*0.5+450*400*0.5; // PET 1800 btl, kaleng 750, kaca 450 (ilustrasi)
+ var poin=1800*1+750*3+450*(3.5);var cost=Math.round(poin*500);
+ $('e1').textContent=rp(Math.round(jual));$('e2').textContent=rp(cost);
+ var left=Math.round(jual)+1500000-cost-1800000;$('e3').textContent=rp(left);
+}
+var T=['Setor','Tukar','Peringkat','Mitra'];
+$('tabs').innerHTML=T.map(function(t,i){return '<button role="tab" aria-selected="'+(i==0)+'" data-i="'+i+'">'+t+'</button>'}).join('');
+document.querySelectorAll('#tabs button').forEach(function(b){b.onclick=function(){
+ document.querySelectorAll('.tab').forEach(function(x,i){x.classList.toggle('on',i==b.dataset.i)});
+ document.querySelectorAll('#tabs button').forEach(function(x){x.setAttribute('aria-selected',x==b)});window.scrollTo(0,0)}});
+mats();draw();
+</script>
+</body>
+</html>
